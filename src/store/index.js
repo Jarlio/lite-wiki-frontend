@@ -1,8 +1,16 @@
-import { createStore } from "vuex";
+import Vuex from "vuex";
 
-export default createStore({
-  state: {},
+export default Vuex.createStore({
+  state: {
+    backendAPIDep: "not available yet",
+    backendAPIDev: "http://localhost:3000",
+    deployment: false
+  },
   mutations: {},
   actions: {},
-  modules: {}
+  modules: {},
+  getters: {
+    getBackendAPI: state =>
+      state.deployment ? state.backendAPIDep : state.backendAPIDev
+  }
 });
