@@ -7,13 +7,18 @@
       <li class="uk-close">
         <a class="uk-accordion-title" href="#">New node</a>
         <div class="uk-accordion-content">
-          <NodeForm @custom-submit="createNode"></NodeForm>
+          <NodeForm
+            @custom-submit="createNode"
+            v-bind:existent-nodes="nodes"
+          ></NodeForm>
         </div>
       </li>
       <li class="uk-close">
         <a class="uk-accordion-title" href="#">Edit node</a>
         <div class="uk-accordion-content">
+          <!-- edit: Boolean: tell if is edit form, if not is create -->
           <NodeForm
+            v-bind:edit="true"
             @custom-submit="editNode"
             v-bind:existent-nodes="nodes"
           ></NodeForm>
@@ -95,7 +100,6 @@ export default {
   },
   methods: {
     createNode(event) {
-      console.log("create node: ", event);
       axios
         .post(this.apiNode, event)
         .then(response => {

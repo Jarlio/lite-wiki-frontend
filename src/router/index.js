@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import Home from "../views/Home.vue";
-import Node from "../components/Node/Node.vue";
+import NodeArticle from "@/views/NodeArticle";
+import ContentForm from "@/components/Node/Content/ContentForm";
 
 const routes = [
   {
@@ -28,11 +29,20 @@ const routes = [
   },
   {
     path: "/node/:id",
-    name: "node",
+    name: "nodeArticle",
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: Node,
+    component: NodeArticle,
+    props: true
+  },
+  {
+    path: "/nodeEditContent",
+    name: "NodeEditContent",
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: ContentForm,
     props: true
   }
 ];

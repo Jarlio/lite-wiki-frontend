@@ -1,7 +1,7 @@
 <template>
   <div class="NodeForm">
     <div class="uk-form-horizontal uk-margin-large">
-      <div class="uk-margin" v-if="existentNodes.length > 0">
+      <div class="uk-margin" v-if="existentNodes.length > 0 && edit">
         <label class="uk-form-label" for="parent-selection">Node to edit</label>
         <div class="uk-form-controls">
           <select
@@ -46,9 +46,12 @@
       </div>
 
       <div class="uk-margin">
-        <label class="uk-form-label" for="introduction">Introduction</label>
+        <label class="uk-form-label" for="parent-selection">Content edit</label>
         <div class="uk-form-controls">
-          <textarea class="uk-textarea" v-model="introduction"></textarea>
+          <router-link
+            :to="{ name: `NodeEditContent`, params: { nodeId: editNodeId } }"
+            >Go to edit content page
+          </router-link>
         </div>
       </div>
 
@@ -75,7 +78,6 @@ export default {
   data: () => ({
     nodes: "",
     title: "",
-    introduction: "",
     parent: "",
     apiNode: "",
     editNodeId: "",
@@ -88,7 +90,6 @@ export default {
     formInfo() {
       return {
         title: this.title,
-        introduction: this.introduction,
         parent: this.parent,
         id: this.id
       };
@@ -100,6 +101,12 @@ export default {
       default: () => {
         return [];
       }
+    },
+    edit: {
+      type: Boolean,
+      default: () => {
+        return false;
+      }
     }
   },
   methods: {
@@ -109,7 +116,6 @@ export default {
         .get(this.apiNode + "/id/" + id)
         .then(response => {
           this.title = response.data.title;
-          this.introduction = response.data.introduction;
           this.parent = response.data.parent;
         })
         .catch(err => console.log(err));
