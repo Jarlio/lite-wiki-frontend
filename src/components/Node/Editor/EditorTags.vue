@@ -33,7 +33,6 @@
 </template>
 
 <script>
-import axios from "axios";
 import WiTag from "../../Tags/WiTag";
 
 export default {
@@ -51,14 +50,17 @@ export default {
     WiTag
   },
   data: () => ({
-    apiTags: "",
     availableTags: [],
     updatedTags: []
   }),
   watch: {
-    propsTags() {
+    propsTags(newValue) {
       console.log("watch:propsTags:");
-      // this.refreshTags(newTags);
+      this.refreshTags(null, newValue);
+    },
+    allTags(newValue) {
+      console.log("watch:propsTags:");
+      this.refreshTags(newValue);
     }
   },
   created() {
@@ -88,26 +90,21 @@ export default {
     deleteTag() {
       return false;
     },
-    refreshTags(newTags) {
+    refreshTags(newTags, propsTagsParam) {
       let tags = newTags ? newTags : this.allTags;
+      let propsTags = propsTagsParam ? propsTagsParam : this.propsTags;
+      console.log("refreshTags:tags", tags);
+      console.log("refreshTags:propsTags", propsTags);
       /* reset tags */
       this.availableTags = [];
       this.updatedTags = [];
-      axios
-        .get(this.apiTags)
-        .then(response => {
-          console.log(response.data);
-          response.data.forEach(tag => {
-            if (tags.indexOf(tag._id) != -1) {
-              this.updatedTags.push(tag);
-            } else {
-              this.availableTags.push(tag);
-            }
-          });
-        })
-        .catch(err => {
-          console.error(err);
-        });
+      tags.forEach(tag => {
+        if (propsTags.indexOf(tag._id) !== -1) {
+          this.updatedTags.push(tag);
+        } else {
+          this.availableTags.push(tag);
+        }
+      });
     }
   }
 };

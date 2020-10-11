@@ -20,7 +20,6 @@
         </p>
         <Editor
           v-if="dataReady"
-          :all-tags="$store.getters.allTags"
           :initial-data="initialContent"
           @update-content="updateContent"
         ></Editor>
@@ -28,6 +27,7 @@
       <hr />
       <EditorTags
         @update-tag="updateTag"
+        :all-tags="$store.getters.allTags"
         :props-tags="initialTags"
       ></EditorTags>
       <hr />
@@ -93,6 +93,10 @@ export default {
     updateContent(event) {
       this.content = event;
     },
+    updateTag(event) {
+      console.log("event:", event);
+      this.tags = event;
+    },
     getEditNodeInfo(id) {
       axios
         .get(this.apiNode + "/id/" + id)
@@ -101,7 +105,6 @@ export default {
           this.content = response.data.content;
           this.initialContent = response.data.content;
           this.initialTags = response.data.tags;
-          this.tags = response.data.tags;
           this.dataReady = true;
           console.log("getEditNodeInfo:", response);
         })
@@ -118,7 +121,7 @@ export default {
           });
           UIkit.notification("Gutten", "success");
           this.initialContent = this.content;
-          this.initialTags = this.tags;
+          this.initialTags = this.tags.map(el => el._id);
         })
         .catch(err => {
           this.logs.push({
@@ -127,10 +130,6 @@ export default {
           });
           UIkit.notification("not gutten", "danger");
         });
-    },
-    updateTag(event) {
-      console.log("event:", event);
-      this.tags = event;
     }
   }
 };
