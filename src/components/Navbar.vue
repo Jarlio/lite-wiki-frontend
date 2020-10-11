@@ -18,7 +18,7 @@
         </li>
         <li class="uk-active">
           <a href="#">
-            <router-link to="/nodeAdmin">NodeAdmin</router-link>
+            <router-link to="/controlPanel">controlPanel</router-link>
           </a>
         </li>
         <li class="uk-active">

@@ -1,7 +1,7 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import Home from "../views/Home.vue";
 import NodeArticle from "@/views/NodeArticle";
-import ContentForm from "@/components/Node/Content/ContentForm";
+import EditNode from "@/components/Node/EditNode";
 
 const routes = [
   {
@@ -19,17 +19,17 @@ const routes = [
       import(/* webpackChunkName: "about" */ "../views/About.vue")
   },
   {
-    path: "/nodeAdmin",
-    name: "NodeAdmin",
+    path: "/controlPanel",
+    name: "ControlPanel",
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () =>
-      import(/* webpackChunkName: "nodeAdmin" */ "../views/NodeAdmin.vue")
+      import(/* webpackChunkName: "nodeAdmin" */ "../views/ControlPanel.vue")
   },
   {
     path: "/node/:id",
-    name: "nodeArticle",
+    name: "NodeArticle",
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
@@ -37,12 +37,12 @@ const routes = [
     props: true
   },
   {
-    path: "/nodeEditContent",
-    name: "NodeEditContent",
+    path: "/editNode/:id",
+    name: "EditNode",
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: ContentForm,
+    component: EditNode,
     props: true
   }
 ];

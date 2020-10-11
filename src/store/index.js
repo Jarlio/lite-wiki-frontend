@@ -1,16 +1,28 @@
 import Vuex from "vuex";
+import axios from "axios";
 
 export default Vuex.createStore({
   state: {
-    backendAPIDep: "not available yet",
-    backendAPIDev: "http://localhost:3000",
-    deployment: false
+    tags: []
   },
-  mutations: {},
-  actions: {},
+  mutations: {
+    setTags: (state, tags) => (state.tags = tags)
+  },
+  actions: {
+    fetchTags({ commit }) {
+      // eslint-disable-next-line no-unused-vars
+      return new Promise((resolve, reject) => {
+        axios
+          .get(`${process.env.VUE_APP_BACKEND_API}/tag/all`)
+          .then(response => {
+            commit("setTags", response.data);
+            resolve();
+          });
+      });
+    }
+  },
   modules: {},
   getters: {
-    getBackendAPI: state =>
-      state.deployment ? state.backendAPIDep : state.backendAPIDev
+    allTags: state => state.tags
   }
 });

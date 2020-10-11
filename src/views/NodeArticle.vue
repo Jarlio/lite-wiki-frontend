@@ -1,4 +1,5 @@
 <template>
+  <!-- Here the page where principal node is rendered -->
   <article class="article-container">
     <Node v-bind:nodeId="nodeId" />
   </article>

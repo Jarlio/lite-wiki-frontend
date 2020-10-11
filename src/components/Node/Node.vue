@@ -30,7 +30,7 @@ export default {
     error: null
   }),
   beforeMount() {
-    this.apiNode = `${this.$store.getters.getBackendAPI}/node`;
+    this.apiNode = `${process.env.VUE_APP_BACKEND_API}/node`;
     this.fetchNode(this.nodeId);
   },
   methods: {

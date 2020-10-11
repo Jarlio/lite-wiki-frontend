@@ -13,6 +13,7 @@
       >{{ tagInfo.name }}</span
     >
     <span
+      :v-if="hasDelete"
       uk-icon="icon: close;"
       @click="
         $emit('delete-tag', {
@@ -30,7 +31,11 @@ export default {
   props: {
     tagInfo: Object,
     arrayName: String,
-    destinationArrayName: String
+    destinationArrayName: String,
+    hasDelete: {
+      type: Boolean,
+      default: false
+    }
   }
 };
 </script>

@@ -9,24 +9,26 @@
       <h4 class="uk-nav-header">Available tags</h4>
       <WiTag
         v-for="tag in tags"
+        :has-delete="true"
         :tagInfo="tag"
         :key="tag.id"
         :arrayName="'tags'"
         :destinationArrayName="'selectedTags'"
-        @move-tag="moveTag($event)"
-        @delete-tag="deleteTag($event)"
+        @move-tag="moveTag"
+        @delete-tag="deleteTag"
       ></WiTag>
     </div>
     <div class="uk-nav uk-nav-default tm-nav">
       <h4 class="uk-nav-header">Selected Tags</h4>
       <WiTag
         v-for="tag in selectedTags"
+        :has-delete="true"
         :tagInfo="tag"
         :key="tag.id"
         :arrayName="'selectedTags'"
         :destinationArrayName="'tags'"
-        @move-tag="moveTag($event)"
-        @delete-tag="deleteTag($event)"
+        @move-tag="moveTag"
+        @delete-tag="deleteTag"
       ></WiTag>
     </div>
     <button class="uk-button uk-button-primary uk-margin uk-width-1-1">
@@ -47,16 +49,28 @@ export default {
     TagForm,
     WiTag
   },
+  props: {
+    allTags: {
+      type: Array,
+      default: () => []
+    }
+  },
+  watch: {
+    // when all tags in props are loaded, refresh the tags
+    allTags(newValue) {
+      this.tags = newValue;
+      this.selectedTags = [];
+    }
+  },
   data: () => ({
     selectedTags: [],
     tags: [],
-    apiTag: "",
-    apiGetAllTags: ""
+    apiTag: ""
   }),
   beforeMount() {
-    this.apiTag = this.$store.getters.getBackendAPI + "/tag";
-    this.apiGetAllTags = this.$store.getters.getBackendAPI + "/tag/all";
-    this.populateTags();
+    var url = process.env.VUE_APP_BACKEND_API;
+    this.apiTag = url + "/tag";
+    this.tags = this.allTags;
   },
   methods: {
     moveTag(event) {
@@ -73,14 +87,6 @@ export default {
         this[destinationArrayName].push(searchEl);
       }
     },
-
-    populateTags() {
-      axios
-        .get(this.apiGetAllTags)
-        .then(results => (this.tags = results.data))
-        .catch(error => console.log(error));
-    },
-
     addNewTag(newTag) {
       axios
         .post(this.apiTag, {
@@ -89,6 +95,8 @@ export default {
         })
         .then(response => {
           this.tags.push(response.data);
+          /* refresh tags from store */
+          this.$store.dispatch("fetchTags");
         })
         .catch(error => {
           console.error("addnewtag failed: ", error);
@@ -109,6 +117,8 @@ export default {
               .indexOf(tagId);
 
             if (removeIndex > -1) this[arrayName].splice(removeIndex, 1);
+            /* refresh tags from store */
+            this.$store.dispatch("fetchTags");
           })
           .catch(error => {
             console.error("addnewtag failed: ", error);

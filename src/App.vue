@@ -4,7 +4,7 @@
     <div class="uk-offcanvas-bar">
       <button class="uk-offcanvas-close" type="button" uk-close></button>
       <h3>Tags</h3>
-      <Tags></Tags>
+      <Tags :all-tags="this.$store.getters.allTags"></Tags>
     </div>
   </div>
   <!-- rest of the content -->
@@ -28,6 +28,10 @@ export default {
   components: {
     Tags,
     Navbar
+  },
+  methos: {},
+  beforeCreate() {
+    this.$store.dispatch("fetchTags");
   }
 };
 </script>
@@ -78,5 +82,15 @@ h6,
   font-weight: 300;
   color: #222;
   text-transform: none;
+}
+
+.custom-small-input {
+  background: transparent;
+  margin: 0 10px 0 0;
+}
+
+.vl {
+  width: 0px;
+  border-left: solid 1px #e5e5e5;
 }
 </style>

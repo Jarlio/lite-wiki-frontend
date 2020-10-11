@@ -24,6 +24,7 @@ import EditorJS from "@editorjs/editorjs";
 import Header from "@editorjs/header";
 import Paragraph from "@editorjs/paragraph";
 import List from "@editorjs/list";
+import axios from "axios";
 
 var editorConfig = {
   holder: "editorjs",
@@ -68,20 +69,36 @@ export default {
   data: () => ({
     data: Object,
     editor: Object,
-    value: Object
+    value: Object,
+    apiNode: String
   }),
+  beforeMount() {
+    this.apiNode = process.env.VUE_APP_BACKEND_API + "/node";
+  },
   mounted: function() {
     this.initializeEditor();
   },
   methods: {
     saveContent() {
-      this.editor.save().then(savedData => {
-        console.log(savedData);
-        this.value = savedData;
-      });
+      var confirmSave = confirm("are you sure you didn't forget anything");
+      if (confirmSave) {
+        this.editor.save().then(savedData => {
+          this.value = savedData;
+        });
+      }
     },
     initializeEditor() {
       this.editor = new EditorJS(editorConfig);
+    },
+    updateContent(nodeId) {
+      var id = nodeId;
+      axios
+        .patch(this.apiNode + "/id/" + id)
+        .then(response => {
+          this.title = response.data.title;
+          this.parent = response.data.parent;
+        })
+        .catch(err => console.log(err));
     }
   }
 };
